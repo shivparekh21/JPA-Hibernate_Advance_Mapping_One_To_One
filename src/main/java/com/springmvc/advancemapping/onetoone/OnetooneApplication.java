@@ -1,5 +1,8 @@
 package com.springmvc.advancemapping.onetoone;
 
+import com.springmvc.advancemapping.onetoone.dao.AppDAO;
+import com.springmvc.advancemapping.onetoone.entity.Instructor;
+import com.springmvc.advancemapping.onetoone.entity.InstructorDetail;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -12,12 +15,48 @@ public class OnetooneApplication {
 		SpringApplication.run(OnetooneApplication.class, args);
 	}
 
-	// Excuted after the spring beans are loaded
+	// commandLineRunner method are Excuted after the spring beans are loaded
+	// no need for @Autowired here as it is annotated with @Bean
 	@Bean
-	public CommandLineRunner commandLineRunner(String[] args) {
+	public CommandLineRunner commandLineRunner(AppDAO appDAO) {
 		return runner -> {
-			System.out.println("Welcome to One to One Mapping in Spring MVC");
+//			createInstructor(appDAO);
+//			findInstructorById(appDAO);
+			deleteInstructorById(appDAO);
 		};
 	}
+
+	private void deleteInstructorById(AppDAO appDAO) {
+		int theId = 2;
+		System.out.println("Deleting instructor id: " + theId);
+		appDAO.deleteInstructorById(theId);
+		System.out.println("Deleted instructor id: " + theId);
+	}
+
+	private void findInstructorById(AppDAO appDAO) {
+		int theId = 1;
+		Instructor instructor = appDAO.findInstructorById(theId);
+		System.out.println("Found instructor: " + instructor);
+	}
+
+	private void createInstructor(AppDAO appDAO) {
+
+		// create the instructor
+		Instructor instructor =
+				new Instructor("Rahul", "Patel", "r.patel@gmail.com");
+
+		// create the instructor detail
+		InstructorDetail instructorDetail =
+				new InstructorDetail("http://www.youtube.com/johndoe", "Golf");
+
+		// associate the objects
+		instructor.setInstructorDetailId(instructorDetail);
+
+		// save the instructor
+		System.out.println("Saving instructor: " + instructor);
+		appDAO.saveInstructor(instructor);
+	}
+
+
 
 }
