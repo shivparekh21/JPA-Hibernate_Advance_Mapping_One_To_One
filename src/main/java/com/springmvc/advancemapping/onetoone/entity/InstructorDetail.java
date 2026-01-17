@@ -17,6 +17,11 @@ public class InstructorDetail {
     @Column(name = "hobby")
     private String hobby;
 
+    // One-to-one mapping with Instructor entity to enable bidirectional access
+    @OneToOne(mappedBy = "instructorDetail",
+            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    private Instructor instructor;
+
     public InstructorDetail() {
     }
 
@@ -47,6 +52,14 @@ public class InstructorDetail {
 
     public void setHobby(String hobby) {
         this.hobby = hobby;
+    }
+
+    public Instructor getInstructor() {
+        return instructor;
+    }
+
+    public void setInstructor(Instructor instructor) {
+        this.instructor = instructor;
     }
 
     @Override
